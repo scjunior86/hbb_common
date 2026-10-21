@@ -493,6 +493,33 @@ impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
         let mut store = false;
+
+         // 1. 安全 - 拒绝局域网发现（默认打勾，即关闭发现 -> "N"）
+        if !config.options.contains_key(keys::OPTION_ENABLE_LAN_DISCOVERY) {
+            config.options.insert(keys::OPTION_ENABLE_LAN_DISCOVERY.to_string(), "N".to_string());
+            store = true;
+        }
+        // 2. 安全 - 允许IP直接访问（默认打勾 -> "Y"）
+        if !config.options.contains_key(keys::OPTION_DIRECT_SERVER) {
+            config.options.insert(keys::OPTION_DIRECT_SERVER.to_string(), "Y".to_string());
+            store = true;
+        }
+        // 3. 安全 - 允许远程修改配置（默认打勾 -> "Y"）
+        if !config.options.contains_key(keys::OPTION_ALLOW_REMOTE_CONFIG_MODIFICATION) {
+            config.options.insert(keys::OPTION_ALLOW_REMOTE_CONFIG_MODIFICATION.to_string(), "Y".to_string());
+            store = true;
+        }
+        // 4. 常规 - 启动时检查软件更新（默认去勾 -> "N"）
+        if !config.options.contains_key(keys::OPTION_ENABLE_CHECK_UPDATE) {
+            config.options.insert(keys::OPTION_ENABLE_CHECK_UPDATE.to_string(), "N".to_string());
+            store = true;
+        }
+        // 5. 常规 - 启用UDP打洞（默认打勾 -> "Y"）
+        if !config.options.contains_key(keys::OPTION_ENABLE_UDP_PUNCH) {
+            config.options.insert(keys::OPTION_ENABLE_UDP_PUNCH.to_string(), "Y".to_string());
+            store = true;
+        }
+        
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
                 decrypt_str_or_original(&socks.password, PASSWORD_ENC_VERSION);
