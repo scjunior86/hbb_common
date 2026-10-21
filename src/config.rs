@@ -494,11 +494,6 @@ impl Config2 {
         let mut config = Config::load_::<Config2>("2");
         let mut store = false;
 
-         // 1. 安全 - 拒绝局域网发现（默认打勾，即关闭发现 -> "N"）
-        if !config.options.contains_key(keys::OPTION_ENABLE_LAN_DISCOVERY) {
-            config.options.insert(keys::OPTION_ENABLE_LAN_DISCOVERY.to_string(), "N".to_string());
-            store = true;
-        }
         // 2. 安全 - 允许IP直接访问（默认打勾 -> "Y"）
         if !config.options.contains_key(keys::OPTION_DIRECT_SERVER) {
             config.options.insert(keys::OPTION_DIRECT_SERVER.to_string(), "Y".to_string());
